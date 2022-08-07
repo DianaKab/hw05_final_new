@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Технологии{% endblock %}
+{% block content %}
+{% comment %} Колонки с отступом сверху и снизу {% endcomment %}
+<span class="border-left" >
+    <img src="{% static 'img/codeby-python-h.jpg' %}" width="1400" height=400" class="d-inline-block align-top" alt="">
+<span/>
+<div class="row">
+  <h1>Вот что я умею</h1>
+  {% comment %}
+    Боковой блок со списком технологий
+    Займет всю ширину блока на мобильном
+    и 25% при размерах экрана ≥768px
+  {% endcomment %}
+
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        Python
+      </li>
+      <li class="list-group-item">
+        Django
+      </li>
+    </ul>
+  {% comment %}
+    Статья
+    Займет всю ширину блока на мобильном
+    и 75% при размерах экрана ≥768px
+  {% endcomment %}
+  <article>
+    <p>На данный момент это те инструменты, которыми я владею.</p>
+  </article>
+</div>
+{% endblock %}
