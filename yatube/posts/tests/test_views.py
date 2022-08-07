@@ -31,7 +31,9 @@ small_gif = (
 class PostViewsTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.user = User.objects.create_user(username='username')
+        cls.user = User.objects.create_user(
+            username='username'
+        )
         cls.group_1 = Group.objects.create(
             title='Тестовая группа',
             slug='test-slug',
@@ -51,12 +53,15 @@ class PostViewsTests(TestCase):
             text='Тестовый пост',
             author=cls.user,
             group=cls.group_1,
-            id='1',
+            pk=1,
             image=cls.uploaded,
         )
         cls.authorized_client = Client()
         # Авторизуем пользователя
         cls.authorized_client.force_login(cls.user)
+
+    def setUp(self):
+        cache.clear()
 
     @classmethod
     def tearDownClass(cls):
@@ -70,22 +75,22 @@ class PostViewsTests(TestCase):
                 'posts/index.html',
             reverse(
                 'posts:group_list',
-                kwargs={'slug': 'test-slug'}):
+                kwargs={'slug': self.group_1.slug}):
                 'posts/group_list.html',
             reverse(
                 'posts:profile',
-                kwargs={'username': 'username'}):
+                kwargs={'username': self.user.username}):
                 'posts/profile.html',
             reverse(
                 'posts:post_detail',
-                kwargs={'post_id': 1}):
+                kwargs={'post_id': self.post.pk}):
                 'posts/post_detail.html',
             reverse(
                 'posts:post_create'):
                 'posts/create_post.html',
             reverse(
                 'posts:post_edit',
-                kwargs={'post_id': 1}):
+                kwargs={'post_id': self.post.pk}):
                 'posts/create_post.html',
         }
         for reverse_name, template in templates_pages_names.items():
@@ -212,6 +217,9 @@ class PaginatorViewsTest(TestCase):
         cls.client_2 = Client()
         cls.client_2.force_login(cls.user_2)
 
+    def setUp(self):
+        cache.clear()
+
     def test_first_page_contains_ten_records(self):
         response = self.anon_client.get(reverse('posts:index'))
         self.assertEqual(len(response.context['page_obj']), FISRT_PAGE)
@@ -249,7 +257,12 @@ class PaginatorViewsTest(TestCase):
         self.assertEqual(len(response.context['page_obj']), SECOND_PAGE2)
 
     def test_cache_index_page(self):
+
         response1 = self.anon_client.get(reverse('posts:index'))
+        Post.objects.create(
+            text='Текст тестировки кэша',
+            author=self.user_1,
+        )
         self.post.delete()
         response2 = self.anon_client.get(reverse('posts:index'))
         self.assertEqual(response1.content, response2.content)

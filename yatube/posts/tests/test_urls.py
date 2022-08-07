@@ -58,17 +58,3 @@ class PostURLTests(TestCase):
         """Страница /create/ доступна авторизованному пользователю."""
         response = self.authorized_client.get('/create/')
         self.assertEqual(response.status_code, HTTPStatus.OK)
-
-    def test_urls_uses_correct_template(self):
-        """URL-адрес использует соответствующий шаблон."""
-        templates_url_names = {
-            'posts/index.html': '/',
-            'posts/group_list.html': '/group/test-slug/',
-            'posts/profile.html': '/profile/HasNoName/',
-            'posts/post_detail.html': '/posts/1/',
-            'posts/create_post.html': '/create/',
-        }
-        for template, address in templates_url_names.items():
-            with self.subTest(address=address):
-                response = self.authorized_client.get(address)
-                self.assertTemplateUsed(response, template)
