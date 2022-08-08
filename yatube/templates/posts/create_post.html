@@ -17,14 +17,10 @@
                     Новый пост
                 {% endif %}
             </div>
-
-            <form method="post" enctype="multipart/form-data">
             <form action="{% if is_edit %} {% url 'posts:post_edit' post_id %}
                 {% else %} {% url 'posts:post_create' %}{% endif %}"method="post">
-
                 {% csrf_token %}
                 {{ form.as_p }}
-
                 {{ form.non_field_errors }}
                     <div class="d-flex justify-content-end">
                         <button type="submit" class="btn btn-primary">

@@ -32,12 +32,6 @@ class PostFormTests(TestCase):
             content=small_gif,
             content_type='image/gif'
         )
-        Post.objects.create(
-            text='Тестовый пост',
-            author=cls.user,
-            pk=1,
-            image=cls.uploaded,
-        )
         cls.form = PostForm()
 
     @classmethod
@@ -81,6 +75,12 @@ class PostFormTests(TestCase):
         )
 
     def test_edit_post(self):
+        Post.objects.create(
+            text='Тестовый пост',
+            author=self.user,
+            pk=1,
+            image=self.uploaded,
+        )
         form_data = {
             'text': 'Тестовый пост изменился',
         }

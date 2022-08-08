@@ -15,11 +15,13 @@ class PostForm(forms.ModelForm):
         fields = ('text', 'group', 'image')
         labels = {
             'text': "Текст поста",
-            'group': "Группа"
+            'group': "Группа",
+            'image': "Изображение"
         }
         help_texts = {
             'text': "Текст нового поста",
-            'group': "Группа, к которой будет относиться пост"
+            'group': "Группа, к которой будет относиться пост",
+            'image': "Изображение поста"
         }
         widgets = {
             'text': forms.Textarea(attrs={'cols': 150, 'row': 100, })
